@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+    <title>Date Expiry Check</title>
+	
+</head>
+<body>
+    <form id="expiryForm">
+        <label for="expiryDate">Select Date:</label>
+        <input type="date" id="expiryDate" name="expiryDate">
+        <select id="status" name="status">
+            <option value="valid">Valid</option>
+            <option value="expired">Expired</option>
+        </select>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+document.getElementById('expiryForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent form submission
+
+    const expiryDate = new Date(document.getElementById('expiryDate').value);
+    const currentDate = new Date();
+
+    if (expiryDate < currentDate) {
+        document.getElementById('status').value = 'expired';
+    } else {
+        document.getElementById('status').value = 'valid';
+    }
+
+    // Optionally, you can submit the form here if needed
+    // this.submit();
+});
+
+
+
+
+
+
+
+
+
+
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $expiryDate = $_POST['expiryDate'];
+    $status = $_POST['status'];
+
+    // Process the form data as needed
+    echo "Selected Date: " . htmlspecialchars($expiryDate) . "<br>";
+    echo "Status: " . htmlspecialchars($status);
+}
+?>

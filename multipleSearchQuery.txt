@@ -1,0 +1,51 @@
+<?php
+// Database connection
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "your_database";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Retrieve search parameters
+$name = isset($_GET['name']) ? $_GET['name'] : '';
+$email = isset($_GET['email']) ? $_GET['email'] : '';
+$age = isset($_GET['age']) ? $_GET['age'] : '';
+
+// Build the query dynamically
+$sql = "SELECT * FROM users WHERE 1=1";
+
+if (!empty($name)) {
+    $sql .= " AND name LIKE '%" . $conn->real_escape_string($name) . "%'";
+}
+if (!empty($email)) {
+    $sql .= " AND email LIKE '%" . $conn->real_escape_string($email) . "%'";
+}
+if (!empty($age)) {
+    $sql .= " AND age = " . (int)$age;
+}
+
+// Execute the query
+$result = $conn->query($sql);
+
+// Display results
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        echo "ID: " . $row['id'] . " - Name: " . $row['name'] . " - Email: " . $row['email'] . " - Age: " . $row['age'] . "<br>";
+    }
+} else {
+    echo "No results found.";
+}
+
+$conn->close();
+?>
+Key Points:
+Dynamic Query Building: The WHERE 1=1 ensures that additional conditions can be appended dynamically without syntax issues.
+SQL Injection Prevention: Use real_escape_string to sanitize user inputs.
+Flexible Search: The LIKE operator allows partial matches, while exact matches can be used for specific fields like age.
+This approach is adaptable for various use cases and ensures a clean, secure, and efficient search functionality.
